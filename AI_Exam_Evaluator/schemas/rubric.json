@@ -1,0 +1,311 @@
+{
+  "mcq_questions": [
+    {
+      "question_number": "1",
+      "section": "A",
+      "max_marks": 1,
+      "keywords": [
+        "rational number",
+        "natural number",
+        "integer",
+        "real number",
+        "whole number",
+        "number systems"
+      ],
+      "correct_answer": "C"
+    },
+    {
+      "question_number": "2",
+      "section": "A",
+      "max_marks": 1,
+      "keywords": [
+        "coordinate geometry",
+        "distance from x-axis",
+        "point coordinates"
+      ],
+      "correct_answer": "B"
+    },
+    {
+      "question_number": "3",
+      "section": "A",
+      "max_marks": 1,
+      "keywords": [
+        "polynomial",
+        "degree of polynomial",
+        "multiplication of polynomials"
+      ],
+      "correct_answer": "A"
+    },
+    {
+      "question_number": "4",
+      "section": "A",
+      "max_marks": 1,
+      "keywords": [
+        "Euclid's 5th postulate",
+        "parallel lines",
+        "transversal",
+        "interior angles",
+        "geometry"
+      ],
+      "correct_answer": "C"
+    },
+    {
+      "question_number": "5",
+      "section": "A",
+      "max_marks": 1,
+      "keywords": [
+        "circle",
+        "chord",
+        "radius",
+        "distance from center",
+        "Pythagorean theorem",
+        "geometry"
+      ],
+      "correct_answer": "D"
+    }
+  ],
+  "written_questions": [
+    {
+      "question_number": "26",
+      "section": "D",
+      "max_marks": 4,
+      "keywords": [
+        "linear equation",
+        "graph",
+        "taxi fare",
+        "distance",
+        "total fare",
+        "coordinate geometry"
+      ],
+      "question_text": "The taxi fare in a city is as follows: For the first kilometer, the fare is Rs 10 and for the subsequent distance it is Rs 6 per km. Taking the distance covered as x km and total fare as Rs y, write a linear equation for this information and draw its graph. From the graph, find the fare for travelling a distance of 4 km.",
+      "expected_steps": [
+        "Formulate the linear equation for total fare y in terms of distance x (e.g., y = 10 + 6(x-1) for x > 1, or y = 6x + 4 for x >= 1).",
+        "Identify at least two points satisfying the equation (e.g., for x=1, y=10; for x=2, y=16; for x=3, y=22).",
+        "Plot the points on a graph paper and draw the line segment/ray.",
+        "Locate x=4 on the x-axis of the graph.",
+        "Find the corresponding y-value from the graph by drawing a perpendicular to the line and then to the y-axis."
+      ]
+    },
+    {
+      "question_number": "27",
+      "section": "D",
+      "max_marks": 4,
+      "keywords": [
+        "isosceles triangle",
+        "angles opposite equal sides",
+        "proof",
+        "congruence",
+        "construction",
+        "geometry"
+      ],
+      "question_text": "Prove that the angles opposite to equal sides of an isosceles triangle are equal.",
+      "expected_steps": [
+        "Draw an isosceles triangle ABC with AB = AC.",
+        "Construct the angle bisector of angle A, AD, meeting BC at D.",
+        "Prove congruence of triangles ABD and ACD using an appropriate criterion (e.g., SAS, ASA, SSS).",
+        "Conclude that angle B = angle C by CPCTC (Corresponding Parts of Congruent Triangles are Congruent)."
+      ]
+    },
+    {
+      "question_number": "28",
+      "section": "D",
+      "max_marks": 4,
+      "keywords": [
+        "circle theorem",
+        "angle at centre",
+        "angle at circumference",
+        "proof",
+        "arc",
+        "figure 4",
+        "geometry"
+      ],
+      "question_text": "Prove that the angle subtended by an arc at the centre is double the angle subtended by it at any point on the remaining part of the circle. Using the above result, find x in figure 4 where O is the centre of the circle.",
+      "expected_steps": [
+        "Draw a circle with center O, an arc PQ, and points R on the remaining part of the circle.",
+        "Construct a line through R and O to a point S on the circle.",
+        "Use exterior angle property of triangle to show angle POS = 2 * angle PRO and angle QOS = 2 * angle QRO (considering different cases).",
+        "Add/subtract the angles to prove angle POQ = 2 * angle PRQ.",
+        "Identify the angle at the center (100 degrees) and the angle at the circumference (x) in Figure 4.",
+        "Apply the theorem: x = (1/2) * 100 degrees and calculate x = 50 degrees."
+      ]
+    },
+    {
+      "question_number": "29",
+      "section": "D",
+      "max_marks": 4,
+      "keywords": [
+        "cone",
+        "volume",
+        "surface area",
+        "diameter",
+        "height",
+        "slant height",
+        "radius",
+        "mensuration"
+      ],
+      "question_text": "A heap of wheat is in the form of a cone whose diameter is 48 m and height is 7 m. Find its volume. If the heap is to be covered by canvas to protect it from rain, find the area of the canvas required.",
+      "expected_steps": [
+        "Calculate the radius (r) from the given diameter (r = 48/2 = 24 m).",
+        "Calculate the volume of the cone using the formula V = (1/3)\u03c0r\u00b2h.",
+        "Calculate the slant height (l) using the formula l = \u221a(r\u00b2 + h\u00b2).",
+        "Calculate the curved surface area of the cone using the formula CSA = \u03c0rl.",
+        "State the final volume and area with correct units."
+      ]
+    },
+    {
+      "question_number": "29 OR",
+      "section": "D",
+      "max_marks": 4,
+      "keywords": [
+        "hemisphere",
+        "surface area",
+        "volume",
+        "cost",
+        "rate",
+        "radius",
+        "mensuration"
+      ],
+      "question_text": "A dome of a building is in the form of a hollow hemisphere. From inside, it was white-washed at the cost of Rs 498.96. If the rate of white washing is Rs 2.00 per square meter, find the volume of air inside the dome.",
+      "expected_steps": [
+        "Calculate the inner surface area from the total cost and rate (Area = Cost / Rate).",
+        "Use the formula for the curved surface area of a hemisphere (2\u03c0r\u00b2) to find the radius (r).",
+        "Calculate the volume of the hemisphere using the formula V = (2/3)\u03c0r\u00b3.",
+        "State the final volume with correct units."
+      ]
+    },
+    {
+      "question_number": "30(ii)",
+      "section": "D",
+      "max_marks": 2,
+      "keywords": [
+        "frequency",
+        "cumulative frequency",
+        "data interpretation",
+        "statistics"
+      ],
+      "question_text": "How many lamps have a lifetime of less than 600 hours?",
+      "expected_steps": [
+        "Identify the class intervals with upper limits less than 600 hours (300-400, 400-500, 500-600).",
+        "Sum the frequencies of these identified class intervals (14 + 56 + 60).",
+        "State the total number of lamps (130 lamps)."
+      ]
+    }
+  ],
+  "page_index": {
+    "1": [
+      1,
+      2,
+      4
+    ],
+    "2": [
+      1,
+      2,
+      4
+    ],
+    "3": [
+      1,
+      2,
+      4
+    ],
+    "4": [
+      1,
+      2,
+      4
+    ],
+    "5": [
+      1,
+      4
+    ],
+    "6": [
+      1,
+      5
+    ],
+    "7": [
+      5
+    ],
+    "8": [
+      5
+    ],
+    "9": [
+      5
+    ],
+    "10": [
+      5
+    ],
+    "11": [
+      5
+    ],
+    "12": [
+      5
+    ],
+    "13": [
+      5
+    ],
+    "14": [
+      5
+    ],
+    "15": [
+      5
+    ],
+    "16": [
+      5,
+      9
+    ],
+    "17": [
+      6,
+      9
+    ],
+    "18": [
+      6,
+      10
+    ],
+    "19": [
+      6,
+      10
+    ],
+    "20": [
+      6,
+      10
+    ],
+    "21": [
+      6,
+      11
+    ],
+    "22": [
+      6,
+      11
+    ],
+    "23": [
+      6,
+      11
+    ],
+    "24": [
+      6,
+      12
+    ],
+    "25": [
+      6,
+      13
+    ],
+    "26": [
+      7,
+      13
+    ],
+    "27": [
+      7,
+      13
+    ],
+    "28": [
+      7,
+      14
+    ],
+    "29": [
+      7,
+      14
+    ],
+    "30": [
+      7,
+      15
+    ]
+  }
+}

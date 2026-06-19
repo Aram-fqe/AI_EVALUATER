@@ -1,0 +1,117 @@
+{
+  "total_score": 19.0,
+  "max_score": 27.0,
+  "percentage": 70.4,
+  "section_scores": {
+    "A": {
+      "score": 5.0,
+      "max": 5.0
+    },
+    "D": {
+      "score": 14.0,
+      "max": 22.0
+    }
+  },
+  "results": [
+    {
+      "question_number": 1,
+      "marks_awarded": 1.0,
+      "max_marks": 1.0,
+      "feedback": "Correct (chose C)",
+      "section": "A",
+      "grading_confidence": 1.0
+    },
+    {
+      "question_number": 2,
+      "marks_awarded": 1.0,
+      "max_marks": 1.0,
+      "feedback": "Correct (chose B)",
+      "section": "A",
+      "grading_confidence": 1.0
+    },
+    {
+      "question_number": 3,
+      "marks_awarded": 1.0,
+      "max_marks": 1.0,
+      "feedback": "Correct (chose A)",
+      "section": "A",
+      "grading_confidence": 1.0
+    },
+    {
+      "question_number": 4,
+      "marks_awarded": 1.0,
+      "max_marks": 1.0,
+      "feedback": "Correct (chose C)",
+      "section": "A",
+      "grading_confidence": 1.0
+    },
+    {
+      "question_number": 5,
+      "marks_awarded": 1.0,
+      "max_marks": 1.0,
+      "feedback": "Correct (chose D)",
+      "section": "A",
+      "grading_confidence": 1.0
+    },
+    {
+      "question_number": 26,
+      "marks_awarded": 4.0,
+      "max_marks": 4.0,
+      "feedback": "Graded",
+      "section": "D",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 27,
+      "marks_awarded": 1.0,
+      "max_marks": 4.0,
+      "feedback": "Graded",
+      "section": "D",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 28,
+      "marks_awarded": 1.0,
+      "max_marks": 4.0,
+      "feedback": "Graded",
+      "section": "D",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 29,
+      "marks_awarded": 4.0,
+      "max_marks": 4.0,
+      "feedback": "Graded",
+      "section": "D",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 29,
+      "marks_awarded": 4.0,
+      "max_marks": 4.0,
+      "feedback": "Graded",
+      "section": "D",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 30,
+      "marks_awarded": 0.0,
+      "max_marks": 2.0,
+      "feedback": "Graded",
+      "section": "D",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    }
+  ],
+  "model_used": "gemini-2.5-flash",
+  "qp_file": "data\\question_papers\\question_paper.pdf",
+  "as_file": "data\\sample_sheets\\student_answers.pdf",
+  "rubric_used": "schemas\\rubric.json",
+  "total_api_retries": 0,
+  "needs_human_review": []
+}
