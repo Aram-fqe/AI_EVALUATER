@@ -1,13 +1,13 @@
 """
 pipeline/rubric_generator.py
 =============================
-Generates a structured rubric from a question paper PDF using Gemini VLM.
+Generates a structured rubric from a question paper PDF using Qwen VLM.
 
 Changes in this version:
   1. Overlapping chunks         — pages 0-4, 3-7, 6-10 so cross-page questions aren't split
   2. Math-operator fallback     — semantic validation accepts "x²+5x+6=0" even without hint words
   3. Best-extraction dedup      — keeps longer question_text + more steps, not just first-seen
-  4. Single shared Gemini client — created once, reused across all chunks and retries
+  4. Single shared Qwen client — created once, reused across all chunks and retries
   5. Multi-hint AK detection    — page needs score ≥ 2 to be treated as answer-key page
 """
 
@@ -25,8 +25,8 @@ from typing import Any
 import fitz          # PyMuPDF
 import pdfplumber
 from dotenv import load_dotenv
-from google import genai
-from google.genai import types
+import base64
+from openai import OpenAI
 
 load_dotenv()
 logger = logging.getLogger(__name__)
@@ -146,16 +146,20 @@ _MATH_OP_RE = re.compile(r"[=+\-×÷√∫∑π²³⁴]|\\frac|\\sqrt|\^|\d+x")
 _VALID_SECTIONS = {"A", "B", "C", "D"}
 
 # ---------------------------------------------------------------------------
-# Shared Gemini client  (Fix 4: single instance)
+# Shared Qwen client  (Fix 4: single instance)
 # ---------------------------------------------------------------------------
 
-_client: genai.Client | None = None
+_client: OpenAI | None = None
 
-def _get_client(api_key: str) -> genai.Client:
+def _get_client(api_key: str) -> OpenAI:
     """Fix 4: create client once and reuse across all chunks and retries."""
     global _client
     if _client is None:
-        _client = genai.Client(api_key=api_key)
+        base_url = os.environ.get("NVIDIA_BASE_URL") or "https://integrate.api.nvidia.com/v1"
+        _client = OpenAI(
+            api_key=api_key,
+            base_url=base_url
+        )
     return _client
 
 
@@ -177,7 +181,7 @@ def generate_rubric(qp_pdf_path: str | Path, api_key: str = "") -> dict:
     global _client
     _client = None   # reset so a fresh client is built with the right key each run
 
-    api_key     = api_key or os.environ.get("GOOGLE_API_KEY", "") or os.environ.get("GEMINI_API_KEY", "")
+    api_key     = api_key or os.environ.get("NVIDIA_API_KEY", "") or os.environ.get("QWEN_API_KEY", "") or os.environ.get("OPENAI_API_KEY", "")
     qp_pdf_path = Path(qp_pdf_path)
     if not qp_pdf_path.exists():
         raise FileNotFoundError(f"Question paper not found: {qp_pdf_path}")
@@ -270,26 +274,28 @@ def _generate_via_vlm_chunked(qp_pdf_path: Path, api_key: str) -> list[dict]:
 
 
 def _call_vlm_for_chunk(chunk_pngs: list[bytes], api_key: str) -> list[dict]:
-    """Send one chunk to Gemini; retry on API/network errors."""
+    """Send one chunk to Qwen; retry on API/network errors."""
     client = _get_client(api_key)               # Fix 4: reuse shared client
-    model  = os.environ.get("VLM_MODEL", "gemini-2.5-flash")
+    model  = os.environ.get("MODEL_NAME") or os.environ.get("VLM_MODEL", "qwen-vl-max")
 
-    parts: list[Any] = [types.Part.from_text(text=RUBRIC_EXTRACTION_PROMPT)]
+    content = [{"type": "text", "text": RUBRIC_EXTRACTION_PROMPT}]
     for png in chunk_pngs:
-        parts.append(types.Part.from_bytes(data=png, mime_type="image/png"))
+        b64 = base64.b64encode(png).decode('utf-8')
+        content.append({
+            "type": "image_url",
+            "image_url": {"url": f"data:image/png;base64,{b64}"}
+        })
 
     last_exc: Exception | None = None
     for attempt in range(API_RETRIES):
         try:
-            response = client.models.generate_content(
+            response = client.chat.completions.create(
                 model=model,
-                contents=types.Content(role="user", parts=parts),
-                config=types.GenerateContentConfig(
-                    temperature=0.0,
-                    max_output_tokens=8192,
-                ),
+                messages=[{"role": "user", "content": content}],
+                temperature=0.0,
+                max_tokens=8192,
             )
-            raw = (response.text or "").strip()
+            raw = (response.choices[0].message.content or "").strip()
             raw = re.sub(r"^```(?:json)?\s*", "", raw)
             raw = re.sub(r"\s*```$",          "", raw)
             return [_normalise_flat(q) for q in _parse_json_balanced(raw)]
@@ -327,7 +333,7 @@ def _parse_json_balanced(raw: str) -> list[dict]:
 
     start = raw.find("[")
     if start == -1:
-        raise ValueError("No JSON array found in Gemini response.")
+        raise ValueError("No JSON array found in Qwen response.")
 
     depth  = 0
     in_str = False

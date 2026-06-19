@@ -6,10 +6,7 @@
       "max_marks": 1,
       "keywords": [
         "rational number",
-        "natural number",
-        "integer",
         "real number",
-        "whole number",
         "number systems"
       ],
       "correct_answer": "C"
@@ -20,8 +17,8 @@
       "max_marks": 1,
       "keywords": [
         "coordinate geometry",
-        "distance from x-axis",
-        "point coordinates"
+        "distance from axis",
+        "ordinate"
       ],
       "correct_answer": "B"
     },
@@ -31,8 +28,8 @@
       "max_marks": 1,
       "keywords": [
         "polynomial",
-        "degree of polynomial",
-        "multiplication of polynomials"
+        "degree",
+        "algebra"
       ],
       "correct_answer": "A"
     },
@@ -41,11 +38,10 @@
       "section": "A",
       "max_marks": 1,
       "keywords": [
-        "Euclid's 5th postulate",
-        "parallel lines",
-        "transversal",
-        "interior angles",
-        "geometry"
+        "Euclid's postulate",
+        "geometry",
+        "angles",
+        "parallel lines"
       ],
       "correct_answer": "C"
     },
@@ -57,14 +53,317 @@
         "circle",
         "chord",
         "radius",
-        "distance from center",
-        "Pythagorean theorem",
-        "geometry"
+        "Pythagoras theorem"
       ],
       "correct_answer": "D"
+    },
+    {
+      "question_number": "6",
+      "section": "A",
+      "max_marks": 1,
+      "keywords": [
+        "sphere",
+        "volume",
+        "surface area"
+      ],
+      "correct_answer": "D"
+    },
+    {
+      "question_number": "7",
+      "section": "A",
+      "max_marks": 1,
+      "keywords": [
+        "triangle",
+        "perimeter",
+        "Heron's formula",
+        "area"
+      ],
+      "correct_answer": "A"
+    },
+    {
+      "question_number": "8",
+      "section": "A",
+      "max_marks": 1,
+      "keywords": [
+        "probability",
+        "empirical probability",
+        "range of probability"
+      ],
+      "correct_answer": "B"
+    },
+    {
+      "question_number": "9",
+      "section": "A",
+      "max_marks": 1,
+      "keywords": [
+        "parallel lines",
+        "transversal",
+        "angles",
+        "triangle sum property"
+      ],
+      "correct_answer": "C"
+    },
+    {
+      "question_number": "10",
+      "section": "A",
+      "max_marks": 1,
+      "keywords": [
+        "parallelogram",
+        "diagonals",
+        "properties"
+      ],
+      "correct_answer": "B"
     }
   ],
   "written_questions": [
+    {
+      "question_number": "11",
+      "section": "B",
+      "max_marks": 2,
+      "keywords": [
+        "rational number",
+        "definition",
+        "integers"
+      ],
+      "question_text": "Is -5 a rational number? Give reasons to your answer.",
+      "expected_steps": [
+        "State the definition of a rational number (p/q form)",
+        "Express -5 in p/q form (e.g., -5/1)",
+        "Conclude that it is rational"
+      ]
+    },
+    {
+      "question_number": "12",
+      "section": "B",
+      "max_marks": 2,
+      "keywords": [
+        "factor theorem",
+        "polynomial",
+        "remainder"
+      ],
+      "question_text": "Without actually finding p(5), find whether (x-5) is a factor of p(x) = x³ - 7x² + 16x - 12. Justify your answer.",
+      "expected_steps": [
+        "State the Factor Theorem condition",
+        "Substitute x=5 into the polynomial expression",
+        "Calculate the value to check if it equals zero"
+      ]
+    },
+    {
+      "question_number": "13",
+      "section": "B",
+      "max_marks": 2,
+      "keywords": [
+        "linear equation",
+        "solution",
+        "infinite solutions"
+      ],
+      "question_text": "Is (1, 8) the only solution of y = 3x + 5? Give reasons.",
+      "expected_steps": [
+        "Identify the equation as a linear equation in two variables",
+        "State the property regarding the number of solutions for such equations",
+        "Provide a counter-example or reasoning"
+      ]
+    },
+    {
+      "question_number": "14",
+      "section": "B",
+      "max_marks": 2,
+      "keywords": [
+        "coordinate geometry",
+        "x-axis",
+        "distance"
+      ],
+      "question_text": "Write the coordinates of a point on x-axis at a distance of 4 units from origin in the positive direction of x-axis and then justify your answer.",
+      "expected_steps": [
+        "Identify the y-coordinate for a point on the x-axis",
+        "Determine the x-coordinate based on distance and direction",
+        "State the final coordinate pair"
+      ]
+    },
+    {
+      "question_number": "15",
+      "section": "B",
+      "max_marks": 2,
+      "keywords": [
+        "probability",
+        "empirical probability",
+        "frequency"
+      ],
+      "question_text": "Two coins are tossed simultaneously 500 times. If we get two heads 100 times, one head 270 times and no head 130 times, then find the probability of getting one or more than one head. Give reasons to your answer also.",
+      "expected_steps": [
+        "Identify favorable outcomes (one head or two heads)",
+        "Sum the frequencies of favorable outcomes",
+        "Divide by total number of trials (500)"
+      ]
+    },
+    {
+      "question_number": "16",
+      "section": "C",
+      "max_marks": 3,
+      "keywords": [
+        "surds",
+        "rationalization",
+        "algebraic simplification"
+      ],
+      "question_text": "Simplify the following expression\n(√3 + 1)(1 - √12) + 9 / (√3 + √12)",
+      "expected_steps": [
+        "Expand the first term (√3 + 1)(1 - √12)",
+        "Rationalize the denominator of the second term",
+        "Simplify and combine like terms to get final answer"
+      ]
+    },
+    {
+      "question_number": "17",
+      "section": "C",
+      "max_marks": 3,
+      "keywords": [
+        "algebraic identity",
+        "verification",
+        "expansion"
+      ],
+      "question_text": "Verify that:\nx³ + y³ + z³ - 3xyz = 1/2 (x + y + z)[(x - y)² + (y - z)² + (z - x)²]",
+      "expected_steps": [
+        "Expand the squared terms on the RHS",
+        "Multiply the sum (x+y+z) with the expanded bracket",
+        "Simplify to match the LHS expression"
+      ]
+    },
+    {
+      "question_number": "18",
+      "section": "C",
+      "max_marks": 3,
+      "keywords": [
+        "factor theorem",
+        "polynomial",
+        "linear equation"
+      ],
+      "question_text": "Find the value of k, if (x-2) is a factor of 4x³ + 3x² - 4x + k.",
+      "expected_steps": [
+        "Apply Factor Theorem: set p(2) = 0",
+        "Substitute x=2 into the polynomial expression",
+        "Solve the resulting linear equation for k"
+      ]
+    },
+    {
+      "question_number": "19",
+      "section": "C",
+      "max_marks": 3,
+      "keywords": [
+        "coordinate geometry",
+        "quadrants",
+        "plotting points"
+      ],
+      "question_text": "Write the quadrant in which each of the following points lie:\n(i) (-3, -5)\n(ii) (2, -5)\n(iii) (-3, 5)\nAlso, verify by locating them on the cartesian plane.",
+      "expected_steps": [
+        "Analyze signs of coordinates for each point to determine quadrant",
+        "Draw Cartesian plane with axes",
+        "Plot the points to verify their positions"
+      ]
+    },
+    {
+      "question_number": "20",
+      "section": "C",
+      "max_marks": 3,
+      "keywords": [
+        "triangles",
+        "area",
+        "median",
+        "bisector"
+      ],
+      "question_text": "In Figure 3, ABC and ABD are two triangles on the same base AB. If the line segment CD is bisected by AB at O, then show that:\narea (Δ ABC) = area (Δ ABD)",
+      "expected_steps": [
+        "Identify AO and BO as medians of triangles ACD and BCD respectively",
+        "State property that median divides triangle into two equal areas",
+        "Add the area equations to prove the result"
+      ]
+    },
+    {
+      "question_number": "21",
+      "section": "C",
+      "max_marks": 3,
+      "keywords": [
+        "linear equation",
+        "solving for x",
+        "number line",
+        "graphical representation"
+      ],
+      "question_text": "Solve the equation 3x + 2 = 2x - 2 and represent the solution on a number line.",
+      "expected_steps": [
+        "Transpose 2x to LHS and 2 to RHS to get 3x - 2x = -2 - 2",
+        "Simplify to find x = -4",
+        "Draw a number line with appropriate scale",
+        "Mark the point x = -4 on the number line"
+      ]
+    },
+    {
+      "question_number": "22",
+      "section": "C",
+      "max_marks": 3,
+      "keywords": [
+        "construction",
+        "triangle",
+        "locus"
+      ],
+      "question_text": "Construct a right triangle whose base is 12 cm and the difference in lengths of its hypotenuse and the other side is 8cm. Also give justification of the steps of construction.",
+      "expected_steps": [
+        "Draw base BC = 12 cm",
+        "Construct 90 degree angle at B and cut segment BD = 8 cm",
+        "Join CD and draw perpendicular bisector to find vertex A",
+        "Justify using properties of perpendicular bisector and triangle inequality"
+      ]
+    },
+    {
+      "question_number": "23",
+      "section": "C",
+      "max_marks": 3,
+      "keywords": [
+        "quadrilateral",
+        "Pythagoras theorem",
+        "Heron's formula",
+        "area"
+      ],
+      "question_text": "In a quadrilateral ABCD, AB = 9 cm, BC = 12 cm, CD = 5 cm, AD = 8 cm and ∠C = 90°. Find the area of ΔABD",
+      "expected_steps": [
+        "Calculate diagonal BD using Pythagoras theorem in ΔBCD",
+        "Calculate area of ΔBCD",
+        "Calculate area of ΔABD using Heron's formula with sides AB, AD, BD"
+      ]
+    },
+    {
+      "question_number": "24",
+      "section": "C",
+      "max_marks": 3,
+      "keywords": [
+        "surface area",
+        "lateral surface area",
+        "perimeter",
+        "height",
+        "cost calculation"
+      ],
+      "question_text": "The cost of painting the four walls of a hall at the rate of Rs 10 per m^2 is Rs 9000. If the perimeter of the floor is 150 m, find the height of the hall.",
+      "expected_steps": [
+        "Calculate the total area of the four walls by dividing total cost by rate (9000 / 10)",
+        "State the formula for area of four walls: 2(l+b)h",
+        "Substitute the given perimeter 2(l+b) = 150 into the area equation",
+        "Solve the equation 150 * h = 900 to find the height h"
+      ]
+    },
+    {
+      "question_number": "25",
+      "section": "C",
+      "max_marks": 3,
+      "keywords": [
+        "probability",
+        "frequency distribution",
+        "empirical probability"
+      ],
+      "question_text": "Three coins are tossed simultaneously 200 times with the following frequencies of different outcomes:\nOutcome: 3 tails (20), 2 tails (68), 1 tail (82), no tail (30)\nIf the three coins are simultaneously tossed again, compute the probability of getting less than 3 tails.",
+      "expected_steps": [
+        "Identify favorable outcomes (less than 3 tails means 0, 1, or 2 tails)",
+        "Sum the frequencies of these outcomes",
+        "Divide sum by total trials (200) to get probability"
+      ]
+    },
     {
       "question_number": "26",
       "section": "D",
@@ -72,18 +371,15 @@
       "keywords": [
         "linear equation",
         "graph",
-        "taxi fare",
         "distance",
-        "total fare",
-        "coordinate geometry"
+        "fare"
       ],
-      "question_text": "The taxi fare in a city is as follows: For the first kilometer, the fare is Rs 10 and for the subsequent distance it is Rs 6 per km. Taking the distance covered as x km and total fare as Rs y, write a linear equation for this information and draw its graph. From the graph, find the fare for travelling a distance of 4 km.",
+      "question_text": "The taxi fair in a city is as follows:\nFor the first kilometer, the fare is Rs 10 and for the subsequent distance it is Rs 6 per km. Taking the distance covered as x km and total fare as Rs y, write a linear equation for this information and draw its graph.\nFrom the graph, find the fare for travelling a distance of 4 km.",
       "expected_steps": [
-        "Formulate the linear equation for total fare y in terms of distance x (e.g., y = 10 + 6(x-1) for x > 1, or y = 6x + 4 for x >= 1).",
-        "Identify at least two points satisfying the equation (e.g., for x=1, y=10; for x=2, y=16; for x=3, y=22).",
-        "Plot the points on a graph paper and draw the line segment/ray.",
-        "Locate x=4 on the x-axis of the graph.",
-        "Find the corresponding y-value from the graph by drawing a perpendicular to the line and then to the y-axis."
+        "Formulate the linear equation y = 10 + 6(x-1) or y = 6x + 4",
+        "Plot at least two points satisfying the equation on a graph",
+        "Draw the straight line passing through the plotted points",
+        "Read the value of y corresponding to x=4 from the graph"
       ]
     },
     {
@@ -92,18 +388,18 @@
       "max_marks": 4,
       "keywords": [
         "isosceles triangle",
-        "angles opposite equal sides",
-        "proof",
         "congruence",
-        "construction",
-        "geometry"
+        "angles",
+        "right triangle"
       ],
-      "question_text": "Prove that the angles opposite to equal sides of an isosceles triangle are equal.",
+      "question_text": "Prove that the angles opposite to equal sides of an isosceles triangle are equal.\nUsing the above, find ∠ B in a right triangle ABC, right angled at A with AB = AC.",
       "expected_steps": [
-        "Draw an isosceles triangle ABC with AB = AC.",
-        "Construct the angle bisector of angle A, AD, meeting BC at D.",
-        "Prove congruence of triangles ABD and ACD using an appropriate criterion (e.g., SAS, ASA, SSS).",
-        "Conclude that angle B = angle C by CPCTC (Corresponding Parts of Congruent Triangles are Congruent)."
+        "Draw the figure of an isosceles triangle ABC with AB = AC",
+        "Draw the bisector of angle A meeting BC at D",
+        "Prove triangle ABD congruent to triangle ACD using SAS criterion",
+        "Conclude angle B equals angle C by CPCT",
+        "Apply the theorem to right triangle ABC where angle A = 90 and AB=AC",
+        "Calculate angle B = (180 - 90)/2 = 45 degrees"
       ]
     },
     {
@@ -111,22 +407,21 @@
       "section": "D",
       "max_marks": 4,
       "keywords": [
-        "circle theorem",
-        "angle at centre",
-        "angle at circumference",
-        "proof",
+        "circle",
         "arc",
-        "figure 4",
-        "geometry"
+        "central angle",
+        "inscribed angle",
+        "theorem"
       ],
-      "question_text": "Prove that the angle subtended by an arc at the centre is double the angle subtended by it at any point on the remaining part of the circle. Using the above result, find x in figure 4 where O is the centre of the circle.",
+      "question_text": "Prove that the angle subtended by an arc at the centre is double the angle subtended by it at any point on the remaining part of the circle.\nUsing the above result, find x in figure 4 where O is the centre of the circle.",
       "expected_steps": [
-        "Draw a circle with center O, an arc PQ, and points R on the remaining part of the circle.",
-        "Construct a line through R and O to a point S on the circle.",
-        "Use exterior angle property of triangle to show angle POS = 2 * angle PRO and angle QOS = 2 * angle QRO (considering different cases).",
-        "Add/subtract the angles to prove angle POQ = 2 * angle PRQ.",
-        "Identify the angle at the center (100 degrees) and the angle at the circumference (x) in Figure 4.",
-        "Apply the theorem: x = (1/2) * 100 degrees and calculate x = 50 degrees."
+        "Draw a circle with center O and arc AB",
+        "Join OA, OB and a point P on the remaining part of the circle",
+        "Extend PO to a point Q outside the circle",
+        "Use exterior angle theorem to show angle AOQ = 2 * angle APO and angle BOQ = 2 * angle BPO",
+        "Add the equations to prove angle AOB = 2 * angle APB",
+        "Identify the reflex angle at the center corresponding to the given inscribed angle of 100 degrees",
+        "Calculate x = 2 * 100 = 200 degrees"
       ]
     },
     {
@@ -136,58 +431,37 @@
       "keywords": [
         "cone",
         "volume",
-        "surface area",
-        "diameter",
-        "height",
-        "slant height",
-        "radius",
+        "curved surface area",
+        "hemisphere",
         "mensuration"
       ],
-      "question_text": "A heap of wheat is in the form of a cone whose diameter is 48 m and height is 7 m. Find its volume. If the heap is to be covered by canvas to protect it from rain, find the area of the canvas required.",
+      "question_text": "A heap of wheat is in the form of a cone whose diameter is 48 m and height is 7 m. Find its volume. If the heap is to be covered by canvas to protect it from rain, find the area of the canvas required.\nOR\nA dome of a building is in the form of a hollow hemisphere. From inside, it was white-washed at the cost of Rs 498.96. If the rate of white washing is Rs 2.00 per square meter, find the volume of air inside the dome.",
       "expected_steps": [
-        "Calculate the radius (r) from the given diameter (r = 48/2 = 24 m).",
-        "Calculate the volume of the cone using the formula V = (1/3)\u03c0r\u00b2h.",
-        "Calculate the slant height (l) using the formula l = \u221a(r\u00b2 + h\u00b2).",
-        "Calculate the curved surface area of the cone using the formula CSA = \u03c0rl.",
-        "State the final volume and area with correct units."
+        "Calculate radius r = diameter / 2 = 24 m",
+        "Calculate Volume of cone = (1/3) * pi * r^2 * h",
+        "Calculate slant height l = sqrt(r^2 + h^2)",
+        "Calculate Curved Surface Area (canvas area) = pi * r * l",
+        "Alternatively: Calculate Inner Surface Area = Total Cost / Rate",
+        "Derive radius r from Surface Area formula 2 * pi * r^2",
+        "Calculate Volume of hemisphere = (2/3) * pi * r^3"
       ]
     },
     {
-      "question_number": "29 OR",
+      "question_number": "30",
       "section": "D",
       "max_marks": 4,
       "keywords": [
-        "hemisphere",
-        "surface area",
-        "volume",
-        "cost",
-        "rate",
-        "radius",
-        "mensuration"
+        "histogram",
+        "frequency distribution",
+        "data interpretation"
       ],
-      "question_text": "A dome of a building is in the form of a hollow hemisphere. From inside, it was white-washed at the cost of Rs 498.96. If the rate of white washing is Rs 2.00 per square meter, find the volume of air inside the dome.",
+      "question_text": "The following table gives the life times of 400 neon lamps:\n[Table Data: 300-400: 14, 400-500: 56, 500-600: 60, 600-700: 86, 700-800: 74, 800-900: 62, 900-1000: 48]\n(i) Represent the given information with the help of a histogram.\n(ii) How many lamps have a lifetime of less than 600 hours?",
       "expected_steps": [
-        "Calculate the inner surface area from the total cost and rate (Area = Cost / Rate).",
-        "Use the formula for the curved surface area of a hemisphere (2\u03c0r\u00b2) to find the radius (r).",
-        "Calculate the volume of the hemisphere using the formula V = (2/3)\u03c0r\u00b3.",
-        "State the final volume with correct units."
-      ]
-    },
-    {
-      "question_number": "30(ii)",
-      "section": "D",
-      "max_marks": 2,
-      "keywords": [
-        "frequency",
-        "cumulative frequency",
-        "data interpretation",
-        "statistics"
-      ],
-      "question_text": "How many lamps have a lifetime of less than 600 hours?",
-      "expected_steps": [
-        "Identify the class intervals with upper limits less than 600 hours (300-400, 400-500, 500-600).",
-        "Sum the frequencies of these identified class intervals (14 + 56 + 60).",
-        "State the total number of lamps (130 lamps)."
+        "Draw X-axis representing Life time intervals and Y-axis representing Number of Lamps",
+        "Draw rectangles for each class interval with heights corresponding to frequencies",
+        "Ensure rectangles are adjacent with no gaps",
+        "Identify class intervals less than 600 hours (300-400, 400-500, 500-600)",
+        "Sum the frequencies of these intervals: 14 + 56 + 60"
       ]
     }
   ],

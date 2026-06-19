@@ -10,7 +10,7 @@ Fixes applied (all in runner.py only):
   FIX  #4     — Stable sort key (qnum, sub-part suffix) so 11a < 11b, "11 OR" < 12
   FIX  #5     — _QNUM_RE upgraded to match Q11, 11), 11(a), 11 OR, "Question 11"
   FIX  #6     — Completeness gate uses broader regex; ratio denominator guarded against 0
-  FIX  #7     — _call_gemini: proper 429 / rate-limit backoff with Retry-After + jitter
+  FIX  #7     — _call_qwen: proper 429 / rate-limit backoff with Retry-After + jitter
   FIX  #8     — Written questions graded concurrently via ThreadPoolExecutor
   FIX  #9     — Graph detection keyword list extended (geometry, pie, number line, etc.)
   FIX  #10    — _clean_feedback strips leading whitespace before startswith("{") check
@@ -24,7 +24,7 @@ Fixes applied (all in runner.py only):
   FIX  #18    — MCQ pages determined from as_index, falls back to ALL pages (not :4 slice)
   FIX  #19    — json.loads guarded by MAX_JSON_BYTES size check before parsing
   FIX  #20    — Per-question latency logged; failed-retry counter tracked globally
-  FIX  #21    — grading_confidence returned from Gemini; low-confidence questions flagged
+  FIX  #21    — grading_confidence returned from Qwen; low-confidence questions flagged
   FIX  #22    — EXAM_BOARD / SUBJECT / CLASS_LEVEL env-vars make prompts configurable
   FIX  #23    — Legacy schema branch removed; only new schema (mcq_questions / written_questions)
   FIX  #24    — OCR fallback now sends max MAX_AS_FALLBACK_PAGES instead of silently all-pages
@@ -142,7 +142,7 @@ logger = logging.getLogger(__name__)
 # Config
 # ---------------------------------------------------------------------------
 
-MODEL                  = os.environ.get("VLM_MODEL", "gemini-2.5-flash")
+MODEL                  = os.environ.get("MODEL_NAME") or os.environ.get("VLM_MODEL", "qwen-vl-max")
 RUBRIC_DEFAULT         = Path("schemas") / "rubric.json"
 OUT_DIR                = Path("reports")
 COMPLETENESS_GATE      = 0.60
@@ -192,78 +192,88 @@ def _sort_key(q: dict) -> tuple[int, str]:
 
 
 # ---------------------------------------------------------------------------
-# Gemini client
+# Qwen client
 # ---------------------------------------------------------------------------
 
 _client: genai.Client | None = None
 
 
-def _get_client() -> genai.Client:
+def _get_client():
     global _client
-    if _client is None:
+    if _client is not None:
+        return _client
+    
+    provider = os.environ.get("VLM_PROVIDER", "qwen").lower()
+    if provider == "gemini":
         key = os.environ.get("GOOGLE_API_KEY", "")
-        if not key:
-            raise ValueError("GOOGLE_API_KEY not set in environment or .env file.")
+        if not key: raise ValueError("GOOGLE_API_KEY not set")
         _client = genai.Client(api_key=key)
+    elif provider == "azure":
+        from openai import AzureOpenAI
+        _client = AzureOpenAI(
+            api_key=os.environ.get("AZURE_API_KEY"),
+            azure_endpoint=os.environ.get("AZURE_ENDPOINT"),
+            api_version="2024-02-01"
+        )
+    else:
+        from openai import OpenAI
+        key = os.environ.get("NVIDIA_API_KEY") or os.environ.get("OPENAI_API_KEY") or os.environ.get("QWEN_API_KEY")
+        if not key: raise ValueError("NVIDIA_API_KEY not set")
+        base_url = "https://integrate.api.nvidia.com/v1"
+        _client = OpenAI(api_key=key, base_url=base_url)
     return _client
 
-
-def _call_gemini(parts: list, max_tokens: int = 8192, retries: int = 5) -> str:
-    """
-    FIX #7 — proper 429 / rate-limit handling with Retry-After + jitter.
-    FIX #20 — tracks global retry count.
-    """
+def _call_qwen(parts: list, max_tokens: int = 8192, retries: int = 5) -> str:
     import random
+    import base64
     global _RETRY_COUNT
 
+    provider = os.environ.get("VLM_PROVIDER", "qwen").lower()
     client = _get_client()
+
     for attempt in range(retries):
         try:
-            resp = client.models.generate_content(
-                model=MODEL,
-                contents=types.Content(role="user", parts=parts),
-                config=types.GenerateContentConfig(
+            if provider == "gemini":
+                resp = client.models.generate_content(
+                    model=MODEL,
+                    contents=types.Content(role="user", parts=parts),
+                    config=types.GenerateContentConfig(
+                        temperature=0.0,
+                        max_output_tokens=max_tokens,
+                    ),
+                )
+                return resp.text or ""
+            else:
+                messages = [{"role": "user", "content": []}]
+                for p in parts:
+                    if isinstance(p, str):
+                        messages[0]["content"].append({"type": "text", "text": p})
+                    elif getattr(p, "text", None):
+                        messages[0]["content"].append({"type": "text", "text": p.text})
+                    elif getattr(p, "inline_data", None):
+                        b64 = base64.b64encode(p.inline_data.data).decode('utf-8')
+                        mime = p.inline_data.mime_type or "image/png"
+                        messages[0]["content"].append({
+                            "type": "image_url",
+                            "image_url": {"url": f"data:{mime};base64,{b64}"}
+                        })
+                resp = client.chat.completions.create(
+                    model=MODEL,
+                    messages=messages,
                     temperature=0.0,
-                    max_output_tokens=max_tokens,
-                ),
-            )
-            return resp.text or ""
-
+                    max_tokens=max_tokens
+                )
+                return resp.choices[0].message.content or ""
         except Exception as exc:
             exc_str = str(exc).lower()
-            is_rate_limit = (
-                "429" in exc_str
-                or "resource_exhausted" in exc_str
-                or "quota" in exc_str
-                or "rate" in exc_str
-            )
-
+            is_rate_limit = "429" in exc_str or "quota" in exc_str or "rate" in exc_str
             if attempt >= retries - 1:
                 raise
-
             _RETRY_COUNT += 1
-
-            # Honour Retry-After when present in the exception message
-            retry_after: float | None = None
-            m = re.search(r"retry.after['\"]?\s*[:=]\s*(\d+)", exc_str)
-            if m:
-                retry_after = float(m.group(1))
-
-            if retry_after is not None:
-                wait = retry_after + random.uniform(0, 2)
-            elif is_rate_limit:
-                wait = min(60.0, 15 * (2 ** attempt)) + random.uniform(0, 5)
-            else:
-                wait = (2 ** attempt) + random.uniform(0, 1)
-
-            logger.warning(
-                "Gemini error (attempt %d/%d, %s): %s — retrying in %.1fs",
-                attempt + 1, retries,
-                "rate-limit" if is_rate_limit else "transient",
-                exc, wait,
-            )
+            wait = min(60.0, 15 * (2 ** attempt)) + random.uniform(0, 5) if is_rate_limit else (2 ** attempt) + random.uniform(0, 1)
+            logger.warning(f"Qwen error (attempt {attempt+1}/{retries}): {exc} - retrying in {wait:.1f}s")
             time.sleep(wait)
-    return ""  # unreachable but satisfies type checker
+    return ""
 
 
 def _img_part(png_bytes: bytes) -> types.Part:
@@ -380,7 +390,7 @@ def _crop_answer_region(png_bytes: bytes, threshold: int = 250) -> bytes:
 
 def _as_column_parts(as_pages: list[bytes], *, crop: bool = True) -> list[types.Part]:
     """
-    Return Gemini Part list for the given AS pages.
+    Return Part list for the given AS pages.
     Each physical page → LEFT + RIGHT column parts, optionally cropped.
     """
     parts: list[types.Part] = []
@@ -403,11 +413,81 @@ def _as_column_parts(as_pages: list[bytes], *, crop: bool = True) -> list[types.
 # Answer-sheet page index (OCR)
 # ---------------------------------------------------------------------------
 
-def _build_as_page_index(student_pdf: str | Path) -> dict[int, list[int]]:
+def _detect_questions_on_page_vlm(page_idx: int, png_bytes: bytes) -> list[int]:
+    """Use VLM to detect question numbers on a handwritten answer sheet page."""
+    import base64
+    import os
+    import re
+    from openai import OpenAI
+    
+    key = os.environ.get("NVIDIA_API_KEY") or os.environ.get("OPENAI_API_KEY") or os.environ.get("QWEN_API_KEY")
+    if not key:
+        return []
+    base_url = "https://integrate.api.nvidia.com/v1"
+    client = OpenAI(api_key=key, base_url=base_url)
+    
+    b64 = base64.b64encode(png_bytes).decode("utf-8")
+    
+    prompt = (
+        "Look at this page from a student's handwritten exam answer sheet. "
+        "Identify all question numbers (e.g. 1, 2, 26, 27, 28, 29, 30) that are written or answered on this page. "
+        "Return ONLY a JSON list of numbers or sub-parts found, e.g. [26, 27] or [28, \"29 OR\"]. "
+        "If no question numbers are found, return []. "
+        "Do NOT include any markdown formatting, explanation, or text outside the JSON list."
+    )
+    
+    messages = [
+        {
+            "role": "user",
+            "content": [
+                {"type": "text", "text": prompt},
+                {"type": "image_url", "image_url": {"url": f"data:image/png;base64,{b64}"}}
+            ]
+        }
+    ]
+    
+    for attempt in range(3):
+        try:
+            resp = client.chat.completions.create(
+                model=os.environ.get("MODEL_NAME", "qwen/qwen3.5-397b-a17b"),
+                messages=messages,
+                temperature=0.0,
+                max_tokens=100
+            )
+            content = resp.choices[0].message.content.strip()
+            cleaned = re.sub(r"```(?:json)?", "", content).strip().rstrip("`").strip()
+            try:
+                qnums = json.loads(cleaned)
+                if isinstance(qnums, list):
+                    results = []
+                    for q in qnums:
+                        try:
+                            num = int(re.sub(r"[^0-9]", "", str(q)))
+                            results.append(num)
+                        except ValueError:
+                            pass
+                    return results
+            except Exception:
+                found = re.findall(r'"([^"]+)"|\b(\d+)\b', cleaned)
+                results = []
+                for sub in found:
+                    for item in sub:
+                        if item:
+                            try:
+                                results.append(int(re.sub(r"[^0-9]", "", item)))
+                            except ValueError:
+                                pass
+                return results
+        except Exception as exc:
+            logger.warning(f"VLM page index check failed for page {page_idx+1} (attempt {attempt+1}): {exc}")
+            time.sleep(1)
+    return []
+
+
+def _build_as_page_index(student_pdf: str | Path, as_pages: list[bytes] | None = None) -> dict[int, list[int]]:
     """
-    OCR pass over the answer sheet.
+    OCR pass over the answer sheet, falling back to parallel VLM classification if OCR finds nothing.
     Returns {qnum (int) → sorted list of 0-based page indices}.
-    FIX #5 — uses upgraded _QNUM_RE.
     """
     index: dict[int, list[int]] = {}
     try:
@@ -415,7 +495,6 @@ def _build_as_page_index(student_pdf: str | Path) -> dict[int, list[int]]:
             for page_num, page in enumerate(pdf.pages):
                 text = page.extract_text() or ""
                 for m in _QNUM_RE.finditer(text):
-                    # Group 1/2/3 correspond to the three alternatives
                     raw = m.group(1) or m.group(2) or m.group(3) or ""
                     qnum = _safe_qnum(raw)
                     if qnum == 0:
@@ -424,17 +503,39 @@ def _build_as_page_index(student_pdf: str | Path) -> dict[int, list[int]]:
                     if page_num not in index[qnum]:
                         index[qnum].append(page_num)
     except Exception as exc:
-        logger.warning("AS page index OCR failed: %s — will use capped fallback.", exc)
-        return {}
+        logger.warning("AS page index OCR failed: %s", exc)
 
     for qnum in index:
         index[qnum].sort()
 
+    if len(index) == 0 and as_pages:
+        logger.info("OCR detected no questions. Running parallel VLM-based answer sheet indexing...")
+        from concurrent.futures import ThreadPoolExecutor, as_completed
+        
+        with ThreadPoolExecutor(max_workers=min(6, len(as_pages))) as pool:
+            futures = {
+                pool.submit(_detect_questions_on_page_vlm, i, as_pages[i]): i
+                for i in range(len(as_pages))
+            }
+            for future in as_completed(futures):
+                page_idx = futures[future]
+                try:
+                    qnums = future.result()
+                    for qnum in qnums:
+                        index.setdefault(qnum, [])
+                        if page_idx not in index[qnum]:
+                            index[qnum].append(page_idx)
+                except Exception as exc:
+                    logger.error(f"VLM indexing thread failed for page {page_idx+1}: {exc}")
+
+        for qnum in index:
+            index[qnum].sort()
+
     n = len(index)
     if n == 0:
         logger.warning(
-            "AS page index: no question labels found via OCR "
-            "(handwritten sheet?) — using capped fallback mode."
+            "AS page index: no question labels found via OCR or VLM fallback "
+            "— using capped fallback mode."
         )
     else:
         logger.info("AS page index built: %d questions detected.", n)
@@ -778,7 +879,7 @@ def _clean_feedback(fb: str) -> str:
 # ---------------------------------------------------------------------------
 
 def _normalise_mcq_letter(raw_chosen: Any) -> str | None:
-    """FIX #3 — extract A/B/C/D from any Gemini response format."""
+    """FIX #3 — extract A/B/C/D from any Qwen response format."""
     if raw_chosen is None:
         return None
     s = str(raw_chosen).upper()
@@ -818,9 +919,9 @@ def _grade_mcq_batch(
                     all_mcq_page_idx.add(min(len(as_pages) - 1, pg_idx + 1))
         mcq_as_pages = [as_pages[i] for i in sorted(all_mcq_page_idx)] if all_mcq_page_idx else as_pages
     else:
-        # No index — send all pages but warn; MCQs could be anywhere
-        logger.warning("MCQ: no AS index — sending all %d pages.", len(as_pages))
-        mcq_as_pages = as_pages
+        # No index — send first 2 pages (to avoid gateway timeout) but warn; MCQs are at the start
+        logger.warning("MCQ: no AS index — sending first 2 pages to avoid gateway timeout.")
+        mcq_as_pages = as_pages[:2]
 
     parts: list[Any] = _as_column_parts(mcq_as_pages)
 
@@ -836,7 +937,7 @@ def _grade_mcq_batch(
 Question numbers to find: {nums_str}
 """))
 
-    raw = _call_gemini(parts, max_tokens=8192)
+    raw = _call_qwen(parts, max_tokens=8192)
 
     try:
         text = re.sub(r"```(?:json)?", "", raw).strip().rstrip("`")
@@ -937,11 +1038,6 @@ def _grade_written(
     # FIX #13 — higher DPI only for graph questions
     page_dpi = 200 if is_graph else 150
 
-    # Retrieve relevant AS pages
-    relevant_as = _find_relevant_answer_pages(qnum, as_pages, as_index, buffer=1)
-    # Re-rasterise at appropriate DPI only if graph (already 150 from initial load)
-    parts: list[Any] = _as_column_parts(relevant_as, crop=True)
-
     # Retrieve QP pages (deduped)
     qp_pages_to_send: list[bytes] = []
     seen_qp: set[int] = set()
@@ -959,6 +1055,31 @@ def _grade_written(
         qp_idx = qp_page_map.get(qnum, 0)
         for offset in range(-1, 3):
             _add_qp_page(qp_idx + offset)
+
+    # Retrieve relevant AS pages with dynamic buffer scaling to stay under the 8-image limit
+    buffer_val = 1
+    relevant_as = _find_relevant_answer_pages(qnum, as_pages, as_index, buffer=buffer_val)
+    
+    # If N AS pages (2*N columns) + M QP pages > 8, try buffer=0
+    if len(relevant_as) * 2 + len(qp_pages_to_send) > 8:
+        buffer_val = 0
+        relevant_as = _find_relevant_answer_pages(qnum, as_pages, as_index, buffer=buffer_val)
+
+    # If still > 8, reduce QP pages
+    if len(relevant_as) * 2 + len(qp_pages_to_send) > 8 and len(qp_pages_to_send) > 1:
+        qp_pages_to_send = qp_pages_to_send[:1]
+
+    # If STILL > 8, slice AS pages to fit
+    if len(relevant_as) * 2 + len(qp_pages_to_send) > 8:
+        max_as_pages = (8 - len(qp_pages_to_send)) // 2
+        if max_as_pages > 0:
+            relevant_as = relevant_as[:max_as_pages]
+        else:
+            relevant_as = relevant_as[:1]
+            qp_pages_to_send = []
+
+    # Re-rasterise at appropriate DPI only if graph (already 150 from initial load)
+    parts: list[Any] = _as_column_parts(relevant_as, crop=True)
 
     for pg in qp_pages_to_send:
         parts.append(_img_part(pg))
@@ -996,7 +1117,7 @@ Return exactly:
     # FIX #13 — token limits: graph gets more room
     token_limit = 768 if is_graph else 384
 
-    raw    = _call_gemini(parts, max_tokens=token_limit)
+    raw    = _call_qwen(parts, max_tokens=token_limit)
     parsed = _extract_json_balanced(raw)
 
     awarded    = min(float(parsed.get("marks_awarded", 0.0)), max_marks)
@@ -1044,7 +1165,7 @@ def run(
     output_dir  = Path(output_dir)
     output_dir.mkdir(exist_ok=True)
 
-    api_key = os.environ.get("GOOGLE_API_KEY", "")
+    api_key = os.environ.get("NVIDIA_API_KEY") or os.environ.get("GOOGLE_API_KEY", "")
 
     print("=" * 62)
     print("  AI EXAM EVALUATOR")
@@ -1092,7 +1213,7 @@ def run(
 
     # ── Step 3: Build AS page index (OCR) ────────────────────────────────────
     logger.info("=== Building answer-sheet page index ===")
-    as_index = _build_as_page_index(student_pdf)
+    as_index = _build_as_page_index(student_pdf, as_pages)
 
     # ── Step 4: QP page map (fallback) ───────────────────────────────────────
     qp_page_map: dict[int, int] = {}
@@ -1235,9 +1356,16 @@ def run(
 
     txt = "\n".join(lines)
     txt_out.write_text(txt, encoding="utf-8")
-    print("\n" + txt)
-    print(f"\n✅  JSON report → {json_out}")
-    print(f"✅  Text report → {txt_out}")
+    def _safe_print(s: str) -> None:
+        try:
+            print(s)
+        except UnicodeEncodeError:
+            enc = sys.stdout.encoding or "utf-8"
+            print(s.encode(enc, errors="replace").decode(enc))
+
+    _safe_print("\n" + txt)
+    _safe_print(f"\n[OK]  JSON report → {json_out}")
+    _safe_print(f"[OK]  Text report → {txt_out}")
 
     return report
 

@@ -1,15 +1,23 @@
 {
-  "total_score": 19.0,
-  "max_score": 27.0,
-  "percentage": 70.4,
+  "total_score": 62.5,
+  "max_score": 70.0,
+  "percentage": 89.3,
   "section_scores": {
     "A": {
-      "score": 5.0,
-      "max": 5.0
+      "score": 10.0,
+      "max": 10.0
+    },
+    "B": {
+      "score": 8.0,
+      "max": 10.0
+    },
+    "C": {
+      "score": 26.0,
+      "max": 30.0
     },
     "D": {
-      "score": 14.0,
-      "max": 22.0
+      "score": 18.5,
+      "max": 20.0
     }
   },
   "results": [
@@ -54,63 +62,229 @@
       "grading_confidence": 1.0
     },
     {
+      "question_number": 6,
+      "marks_awarded": 1.0,
+      "max_marks": 1.0,
+      "feedback": "Correct (chose D)",
+      "section": "A",
+      "grading_confidence": 1.0
+    },
+    {
+      "question_number": 7,
+      "marks_awarded": 1.0,
+      "max_marks": 1.0,
+      "feedback": "Correct (chose A)",
+      "section": "A",
+      "grading_confidence": 1.0
+    },
+    {
+      "question_number": 8,
+      "marks_awarded": 1.0,
+      "max_marks": 1.0,
+      "feedback": "Correct (chose B)",
+      "section": "A",
+      "grading_confidence": 1.0
+    },
+    {
+      "question_number": 9,
+      "marks_awarded": 1.0,
+      "max_marks": 1.0,
+      "feedback": "Correct (chose C)",
+      "section": "A",
+      "grading_confidence": 1.0
+    },
+    {
+      "question_number": 10,
+      "marks_awarded": 1.0,
+      "max_marks": 1.0,
+      "feedback": "Correct (chose B)",
+      "section": "A",
+      "grading_confidence": 1.0
+    },
+    {
+      "question_number": 11,
+      "marks_awarded": 2.0,
+      "max_marks": 2.0,
+      "feedback": "Correctly states that -5 is rational because it can be written as -5/1, where both numerator and denominator are integers and denominator ≠ 0. Full marks awarded for correct reasoning and conclusion.",
+      "section": "B",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 12,
+      "marks_awarded": 0.0,
+      "max_marks": 2.0,
+      "feedback": "The student did not follow the instruction 'Without actually finding p(5)'. Instead of using the Remainder Theorem to check if the remainder is zero, the student incorrectly applied the Factor Theorem by checking if the constant term (-12) is divisible by 5. This is not a valid method for determining factors of polynomials.",
+      "section": "B",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 13,
+      "marks_awarded": 2.0,
+      "max_marks": 2.0,
+      "feedback": "Correct answer 'No' with valid reasoning: states that y = 3x + 5 has many solutions and provides correct counter-examples (-1,2) and (2,11). Full marks awarded.",
+      "section": "B",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 14,
+      "marks_awarded": 2.0,
+      "max_marks": 2.0,
+      "feedback": "Correct coordinate (4,0) stated. Justification correctly identifies that any point on x-axis has y=0 and x is the distance from origin in positive direction. Full marks awarded.",
+      "section": "B",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 15,
+      "marks_awarded": 2.0,
+      "max_marks": 2.0,
+      "feedback": "Correct identification of favorable outcomes (one head + two heads = 270 + 100 = 370), correct division by total trials (500), and simplified fraction 37/50. Reasoning is clearly stated. Full marks awarded.",
+      "section": "B",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 16,
+      "marks_awarded": 3.0,
+      "max_marks": 3.0,
+      "feedback": "Correct expansion of first term, correct rationalization of second term, and correct final simplification to -5. All steps shown clearly and accurately.",
+      "section": "C",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 17,
+      "marks_awarded": 3.0,
+      "max_marks": 3.0,
+      "feedback": "Correct verification: expanded RHS, multiplied by (x+y+z), and simplified to match LHS. All steps shown clearly and accurately.",
+      "section": "C",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 18,
+      "marks_awarded": 3.0,
+      "max_marks": 3.0,
+      "feedback": "Correct application of Factor Theorem: p(2)=0, accurate substitution and simplification to solve for k = -36. All steps shown clearly.",
+      "section": "C",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 19,
+      "marks_awarded": 3.0,
+      "max_marks": 3.0,
+      "feedback": "Correctly identified all three quadrants: (-3,-5) in 3rd, (2,-5) in 4th, (-3,5) in 2nd. Cartesian plane drawn with proper axes and scaling; all three points accurately plotted with dashed lines to axes. Full marks awarded.",
+      "section": "C",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 20,
+      "marks_awarded": 3.0,
+      "max_marks": 3.0,
+      "feedback": "Correct construction of perpendiculars CL and DM. Correctly proved triangle congruence (ΔCOL ≅ ΔDOM) using AAS criterion. Correctly deduced CL = DM and substituted into area formulas to show area(ΔABC) = area(ΔABD). All steps are mathematically sound and match expected solution.",
+      "section": "C",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 21,
+      "marks_awarded": 3.0,
+      "max_marks": 3.0,
+      "feedback": "Correctly solved the equation to get x = -4. The graphical representation on the Cartesian plane is accurate, showing the vertical line x = -4.",
+      "section": "C",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 22,
+      "marks_awarded": 2.0,
+      "max_marks": 3.0,
+      "feedback": "Construction steps are correctly described and justified using perpendicular bisector property. However, no actual geometric construction (arcs, measurements, labeled diagram) is shown — only a rough sketch with annotations. Per CBSE marking scheme for construction questions, full marks require visible construction steps with compass arcs or clear measurement indications. Deduct 1 mark for missing explicit construction diagram.",
+      "section": "C",
+      "grading_confidence": 0.95,
+      "needs_review": false
+    },
+    {
+      "question_number": 23,
+      "marks_awarded": 3.0,
+      "max_marks": 3.0,
+      "feedback": "Correctly calculated BD = 13 cm using Pythagoras theorem in ΔBCD. Correctly applied Heron’s formula for ΔABD with sides 13, 9, 8 cm, computed semi-perimeter s = 15 cm, and found area ≈ 29 cm² (approx). All steps are mathematically correct and match expected solution.",
+      "section": "C",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 24,
+      "marks_awarded": 0.0,
+      "max_marks": 3.0,
+      "feedback": "The student has attempted Question 24 (the cylindrical pipe problem) but has not attempted the 'OR' part regarding the rectangular hall. The work for finding the height of the hall is completely absent from the answer sheet.",
+      "section": "C",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
+      "question_number": 25,
+      "marks_awarded": 3.0,
+      "max_marks": 3.0,
+      "feedback": "Correctly identified total trials (200), summed frequencies for outcomes with less than 3 tails (68+82+30=180), and computed probability as 180/200 = 9/10. All steps are mathematically correct and clearly shown.",
+      "section": "C",
+      "grading_confidence": 1.0,
+      "needs_review": false
+    },
+    {
       "question_number": 26,
       "marks_awarded": 4.0,
       "max_marks": 4.0,
-      "feedback": "Graded",
+      "feedback": "Correct linear equation derived (y = 6x + 4 or equivalent). Table of values correctly computed for x=0,1,2. Graph accurately plotted with labeled axes and correct scaling. Fare for 4 km correctly read as Rs 28 from graph. All steps complete and mathematically sound.",
       "section": "D",
       "grading_confidence": 1.0,
       "needs_review": false
     },
     {
       "question_number": 27,
-      "marks_awarded": 1.0,
+      "marks_awarded": 3.5,
       "max_marks": 4.0,
-      "feedback": "Graded",
+      "feedback": "Proof of isosceles triangle theorem is correct with proper construction, congruence (SSS used instead of SAS but still valid), and CPCT conclusion. Application to right triangle ABC is mostly correct: correctly identifies ∠A=90°, AB=AC, and concludes ∠B=∠C. However, calculation step '2∠B = 90°' skips showing that ∠B + ∠C = 90° explicitly (though implied). Final answer ∠B=45° is correct. Minor deduction for incomplete justification in application part.",
       "section": "D",
-      "grading_confidence": 1.0,
+      "grading_confidence": 0.95,
       "needs_review": false
     },
     {
       "question_number": 28,
-      "marks_awarded": 1.0,
+      "marks_awarded": 3.0,
       "max_marks": 4.0,
-      "feedback": "Graded",
+      "feedback": "Proof is correctly structured with construction, exterior angle property, and addition of angles to show ∠POR = 2∠PQR. Application part correctly identifies reflex angle as 2×100°=200°, but fails to compute x = 360° - 200° = 160° as required by the figure (x is the non-reflex central angle). Final answer missing or incorrect.",
       "section": "D",
-      "grading_confidence": 1.0,
+      "grading_confidence": 0.95,
       "needs_review": false
     },
     {
       "question_number": 29,
       "marks_awarded": 4.0,
       "max_marks": 4.0,
-      "feedback": "Graded",
-      "section": "D",
-      "grading_confidence": 1.0,
-      "needs_review": false
-    },
-    {
-      "question_number": 29,
-      "marks_awarded": 4.0,
-      "max_marks": 4.0,
-      "feedback": "Graded",
+      "feedback": "Correctly calculated radius (24 m), volume of cone (4224 m³), slant height (25 m), and curved surface area (1885.7 m²). All steps shown clearly with correct formulas and arithmetic. No errors detected.",
       "section": "D",
       "grading_confidence": 1.0,
       "needs_review": false
     },
     {
       "question_number": 30,
-      "marks_awarded": 0.0,
-      "max_marks": 2.0,
-      "feedback": "Graded",
+      "marks_awarded": 4.0,
+      "max_marks": 4.0,
+      "feedback": "Histogram correctly drawn with labeled axes (Life Time on X, No. of Lamps on Y), appropriate scaling, and adjacent rectangles for each class interval. Part (ii) correctly identifies lamps with lifetime <600 hours as sum of frequencies for 300-400, 400-500, 500-600: 14+56+60=130. All steps complete and accurate.",
       "section": "D",
       "grading_confidence": 1.0,
       "needs_review": false
     }
   ],
-  "model_used": "gemini-2.5-flash",
-  "qp_file": "data\\question_papers\\question_paper.pdf",
-  "as_file": "data\\sample_sheets\\student_answers.pdf",
+  "model_used": "qwen/qwen3.5-397b-a17b",
+  "qp_file": "data\\question_papers\\question_paper1.pdf",
+  "as_file": "data\\sample_sheets\\student_answers1.pdf",
   "rubric_used": "schemas\\rubric.json",
   "total_api_retries": 0,
   "needs_human_review": []

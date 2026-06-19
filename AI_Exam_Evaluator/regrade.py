@@ -25,9 +25,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# ── Google Gemini client ──────────────────────────────────────────────────────
-from google import genai
-from google.genai import types
+import base64
+from openai import OpenAI
 import fitz  # PyMuPDF
 
 # ── Config ────────────────────────────────────────────────────────────────────
@@ -36,17 +35,18 @@ AS_PATH   = sys.argv[2] if len(sys.argv) > 2 else r"data\sample_sheets\student_a
 RUBRIC    = sys.argv[3] if len(sys.argv) > 3 else r"schemas\rubric.json"
 OUT_JSON  = r"reports\report_accurate.json"
 OUT_TXT   = r"reports\report_accurate.txt"
-MODEL     = os.environ.get("VLM_MODEL", "gemini-2.5-flash")
+MODEL     = os.environ.get("MODEL_NAME") or os.environ.get("VLM_MODEL", "qwen/qwen3.5-397b-a17b")
 
-# ── Gemini client ─────────────────────────────────────────────────────────────
+# ── Qwen client ───────────────────────────────────────────────────────────────
 _client = None
 def get_client():
     global _client
     if _client is None:
-        key = os.environ.get("GOOGLE_API_KEY", "")
+        key = os.environ.get("NVIDIA_API_KEY")
         if not key:
-            raise ValueError("GOOGLE_API_KEY not set in .env")
-        _client = genai.Client(api_key=key)
+            raise ValueError("NVIDIA_API_KEY not set in .env")
+        base_url = os.environ.get("NVIDIA_BASE_URL") or "https://integrate.api.nvidia.com/v1"
+        _client = OpenAI(api_key=key, base_url=base_url)
     return _client
 
 # ── PDF → PNG bytes ───────────────────────────────────────────────────────────
@@ -61,26 +61,34 @@ def pdf_to_pages(path: str, dpi: int = 150) -> list[bytes]:
     return pages
 
 def img_part(png: bytes):
-    return types.Part.from_bytes(data=png, mime_type="image/png")
+    return {"type": "image", "data": png}
 
-# ── Gemini call with retry ────────────────────────────────────────────────────
-def call_gemini(parts: list, max_tokens: int = 2048, retries: int = 3) -> str:
+# ── Qwen call with retry ──────────────────────────────────────────────────────
+def call_qwen(parts: list, max_tokens: int = 2048, retries: int = 3) -> str:
     client = get_client()
+    messages = [{"role": "user", "content": []}]
+    for p in parts:
+        if isinstance(p, str):
+            messages[0]["content"].append({"type": "text", "text": p})
+        elif isinstance(p, dict) and p.get("type") == "image":
+            b64 = base64.b64encode(p["data"]).decode('utf-8')
+            messages[0]["content"].append({
+                "type": "image_url",
+                "image_url": {"url": f"data:image/png;base64,{b64}"}
+            })
     for attempt in range(retries):
         try:
-            resp = client.models.generate_content(
+            resp = client.chat.completions.create(
                 model=MODEL,
-                contents=types.Content(role="user", parts=parts),
-                config=types.GenerateContentConfig(
-                    max_output_tokens=max_tokens,
-                    temperature=0.0,
-                ),
+                messages=messages,
+                temperature=0.0,
+                max_tokens=max_tokens,
             )
-            return resp.text or ""
+            return resp.choices[0].message.content or ""
         except Exception as e:
             if attempt < retries - 1:
                 wait = 2 ** attempt
-                print(f"    ⚠ Gemini error (attempt {attempt+1}): {e} — retrying in {wait}s")
+                print(f"    ⚠ Qwen error (attempt {attempt+1}): {e} — retrying in {wait}s")
                 time.sleep(wait)
             else:
                 raise
@@ -201,7 +209,7 @@ def grade_mcq_batch(mcq_questions: list[dict], as_pages: list[bytes], qp_pages: 
 
     answer_key_str = json.dumps(answer_key, indent=2)
 
-    parts.append(types.Part.from_text(text=f"""You are an exam grader. The images above are the student's answer sheet (all pages) followed by the question paper.
+    parts.append(f"""You are an exam grader. The images above are the student's answer sheet (all pages) followed by the question paper.
 
 The MCQ answer key is:
 {answer_key_str}
@@ -221,9 +229,9 @@ For each question:
 - "awarded": marks awarded (1.0 if correct, 0.0 if wrong or not attempted)
 - "feedback": brief one-line explanation
 
-Be strict: if the student's chosen letter does not match the correct answer, award 0."""))
+Be strict: if the student's chosen letter does not match the correct answer, award 0.""")
 
-    raw = call_gemini(parts, max_tokens=2048)
+    raw = call_qwen(parts, max_tokens=2048)
 
     # Parse the batch response
     try:
@@ -281,7 +289,7 @@ def grade_written_question(q: dict, as_pages: list[bytes], qp_pages: list[bytes]
         for pg in qp_pages[:2]:
             parts.append(img_part(pg))
 
-    parts.append(types.Part.from_text(text=f"""You are an expert CBSE exam grader.
+    parts.append(f"""You are an expert CBSE exam grader.
 
 QUESTION {qnum} ({section}, {max_marks} marks):
 {q_text}
@@ -304,9 +312,9 @@ TASK:
    - Maximum marks: {max_marks}
 
 Return ONLY this JSON (no markdown, no extra text):
-{{"marks_awarded": <number>, "max_marks": {max_marks}, "feedback": "<specific feedback about what student did right/wrong, 1-3 sentences>"}}"""))
+{{"marks_awarded": <number>, "max_marks": {max_marks}, "feedback": "<specific feedback about what student did right/wrong, 1-3 sentences>"}}""")
 
-    raw = call_gemini(parts, max_tokens=1024)
+    raw = call_qwen(parts, max_tokens=1024)
     parsed = extract_json(raw)
 
     awarded  = min(float(parsed.get("marks_awarded", 0.0)), max_marks)
